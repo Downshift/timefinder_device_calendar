@@ -120,9 +120,9 @@ class CalendarDelegate : PluginRegistry.RequestPermissionsResultListener {
         }
 
         val cachedValues: CalendarMethodsParametersCacheModel = _cachedParametersMap[requestCode]
-          ?: // unlikely scenario where another plugin is potentially using the same request code but it's not one we are tracking so return to
-          // indicate we're not handling the request
-          return false
+            ?: // unlikely scenario where another plugin is potentially using the same request code but it's not one we are tracking so return to
+            // indicate we're not handling the request
+            return false
 
         try {
             if (!permissionGranted) {
@@ -271,9 +271,9 @@ class CalendarDelegate : PluginRegistry.RequestPermissionsResultListener {
             }
         } else {
             val parameters = CalendarMethodsParametersCacheModel(
-                    pendingChannelResult = pendingChannelResult,
-                    calendarDelegateMethodCode = DELETE_CALENDAR_REQUEST_CODE,
-                    calendarId = calendarId)
+                pendingChannelResult = pendingChannelResult,
+                calendarDelegateMethodCode = DELETE_CALENDAR_REQUEST_CODE,
+                calendarId = calendarId)
             requestPermissions(parameters)
         }
 
@@ -285,10 +285,10 @@ class CalendarDelegate : PluginRegistry.RequestPermissionsResultListener {
 
         var uri = CalendarContract.Calendars.CONTENT_URI
         uri = uri.buildUpon()
-          .appendQueryParameter(CALLER_IS_SYNCADAPTER, "true")
-          .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, localAccountName)
-          .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL)
-          .build()
+            .appendQueryParameter(CALLER_IS_SYNCADAPTER, "true")
+            .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, localAccountName)
+            .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL)
+            .build()
         val values = ContentValues()
         values.put(CalendarContract.Calendars.NAME, calendarName)
         values.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, calendarName)
@@ -296,7 +296,7 @@ class CalendarDelegate : PluginRegistry.RequestPermissionsResultListener {
         values.put(CalendarContract.Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL)
         values.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER)
         values.put(CalendarContract.Calendars.CALENDAR_COLOR, Color.parseColor((calendarColor
-                ?: "0xFFFF0000").replace("0x", "#"))) // Red colour as a default
+            ?: "0xFFFF0000").replace("0x", "#"))) // Red colour as a default
         values.put(CalendarContract.Calendars.OWNER_ACCOUNT, localAccountName)
         values.put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, java.util.Calendar.getInstance().timeZone.id)
 
@@ -433,7 +433,7 @@ class CalendarDelegate : PluginRegistry.RequestPermissionsResultListener {
                 }
             }
             job.invokeOnCompletion {
-                cause ->
+                    cause ->
                 if (cause == null) {
                     uiThreadHandler.post {
                         finishWithSuccess(eventId.toString(), pendingChannelResult)
@@ -449,7 +449,7 @@ class CalendarDelegate : PluginRegistry.RequestPermissionsResultListener {
 
     private fun deleteExistingReminders(contentResolver: ContentResolver?, eventId: Long) {
         val cursor = CalendarContract.Reminders.query(contentResolver, eventId, arrayOf(
-          CalendarContract.Reminders._ID
+            CalendarContract.Reminders._ID
         ))
         while (cursor != null && cursor.moveToNext()) {
             var reminderUri: Uri? = null
@@ -540,13 +540,13 @@ class CalendarDelegate : PluginRegistry.RequestPermissionsResultListener {
                 put(CalendarContract.Attendees.ATTENDEE_NAME, it.name)
                 put(CalendarContract.Attendees.ATTENDEE_EMAIL, it.emailAddress)
                 put(
-                  CalendarContract.Attendees.ATTENDEE_RELATIONSHIP,
-                  CalendarContract.Attendees.RELATIONSHIP_ATTENDEE
+                    CalendarContract.Attendees.ATTENDEE_RELATIONSHIP,
+                    CalendarContract.Attendees.RELATIONSHIP_ATTENDEE
                 )
                 put(CalendarContract.Attendees.ATTENDEE_TYPE, it.role)
                 put(
-                  CalendarContract.Attendees.ATTENDEE_STATUS,
-                  it.attendanceStatus
+                    CalendarContract.Attendees.ATTENDEE_STATUS,
+                    it.attendanceStatus
                 )
                 put(CalendarContract.Attendees.EVENT_ID, eventId)
             }

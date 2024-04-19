@@ -113,12 +113,15 @@ class DeviceCalendarPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware {
             REQUEST_PERMISSIONS_METHOD -> {
                 _calendarDelegate.requestPermissions(result)
             }
+
             HAS_PERMISSIONS_METHOD -> {
                 _calendarDelegate.hasPermissions(result)
             }
+
             RETRIEVE_CALENDARS_METHOD -> {
                 _calendarDelegate.retrieveCalendars(result)
             }
+
             RETRIEVE_EVENTS_METHOD -> {
                 val calendarId = call.argument<String>(CALENDAR_ID_ARGUMENT)
                 val startDate = call.argument<Long>(START_DATE_ARGUMENT)
@@ -127,18 +130,21 @@ class DeviceCalendarPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware {
 
                 _calendarDelegate.retrieveEvents(calendarId!!, startDate, endDate, eventIds, result)
             }
+
             CREATE_OR_UPDATE_EVENT_METHOD -> {
                 val calendarId = call.argument<String>(CALENDAR_ID_ARGUMENT)
                 val event = parseEventArgs(call, calendarId)
 
                 _calendarDelegate.createOrUpdateEvent(calendarId!!, event, result)
             }
+
             DELETE_EVENT_METHOD -> {
                 val calendarId = call.argument<String>(CALENDAR_ID_ARGUMENT)
                 val eventId = call.argument<String>(EVENT_ID_ARGUMENT)
 
                 _calendarDelegate.deleteEvent(calendarId!!, eventId!!, result)
             }
+
             DELETE_EVENT_INSTANCE_METHOD -> {
                 val calendarId = call.argument<String>(CALENDAR_ID_ARGUMENT)
                 val eventId = call.argument<String>(EVENT_ID_ARGUMENT)
@@ -148,6 +154,7 @@ class DeviceCalendarPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware {
 
                 _calendarDelegate.deleteEvent(calendarId!!, eventId!!, result, startDate, endDate, followingInstances)
             }
+
             CREATE_CALENDAR_METHOD -> {
                 val calendarName = call.argument<String>(CALENDAR_NAME_ARGUMENT)
                 val calendarColor = call.argument<String>(CALENDAR_COLOR_ARGUMENT)
@@ -155,10 +162,12 @@ class DeviceCalendarPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware {
 
                 _calendarDelegate.createCalendar(calendarName!!, calendarColor, localAccountName!!, result)
             }
+
             DELETE_CALENDAR_METHOD -> {
                 val calendarId = call.argument<String>(CALENDAR_ID_ARGUMENT)
-                _calendarDelegate.deleteCalendar(calendarId!!,result)
+                _calendarDelegate.deleteCalendar(calendarId!!, result)
             }
+
             else -> {
                 result.notImplemented()
             }
@@ -190,12 +199,16 @@ class DeviceCalendarPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware {
             event.attendees = mutableListOf()
             val attendeesArgs = call.argument<List<Map<String, Any>>>(ATTENDEES_ARGUMENT)!!
             for (attendeeArgs in attendeesArgs) {
-                event.attendees.add(Attendee(
+                event.attendees.add(
+                    Attendee(
                         attendeeArgs[EMAIL_ADDRESS_ARGUMENT] as String,
                         attendeeArgs[NAME_ARGUMENT] as String?,
                         attendeeArgs[ROLE_ARGUMENT] as Int,
                         attendeeArgs[ATTENDANCE_STATUS_ARGUMENT] as Int?,
-                        null, null))
+                        null,
+                        null
+                    )
+                )
             }
         }
 
@@ -227,7 +240,9 @@ class DeviceCalendarPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware {
         }
 
         if (recurrenceRuleArgs.containsKey(DAYS_OF_WEEK_ARGUMENT)) {
-            recurrenceRule.daysOfWeek = recurrenceRuleArgs[DAYS_OF_WEEK_ARGUMENT].toListOf<Int>()?.map { DayOfWeek.values()[it] }?.toMutableList()
+            recurrenceRule.daysOfWeek =
+                recurrenceRuleArgs[DAYS_OF_WEEK_ARGUMENT].toListOf<Int>()?.map { DayOfWeek.values()[it] }
+                    ?.toMutableList()
         }
 
         if (recurrenceRuleArgs.containsKey(DAY_OF_MONTH_ARGUMENT)) {
@@ -254,11 +269,11 @@ class DeviceCalendarPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun parseAvailability(value: String?): Availability? =
-            if (value == null || value == Constants.AVAILABILITY_UNAVAILABLE) {
-                null
-            } else {
-                Availability.valueOf(value)
-            }
+        if (value == null || value == Constants.AVAILABILITY_UNAVAILABLE) {
+            null
+        } else {
+            Availability.valueOf(value)
+        }
 
     private fun parseEventStatus(value: String?): EventStatus? =
         if (value == null || value == Constants.EVENT_STATUS_NONE) {
